@@ -101,8 +101,10 @@
 		{#each table.getFooterGroups() as footerGroup}
 			<tr>
 				{#each footerGroup.headers as footer}
-					<th>
-						<RenderFooter {footer} />
+					<th colspan={footer.colSpan}>
+						{#if !footer.isPlaceholder}
+							<RenderFooter {footer} />
+						{/if}
 					</th>
 				{/each}
 			</tr>
