@@ -72,32 +72,56 @@
 	const table = createTable(options);
 </script>
 
-<div class="table-body">
-	{#each table.getHeaderGroups() as headerGroup}
-		<div class="table-row">
-			{#each headerGroup.headers as header}
-				<div class="table-cell">
-					<RenderHeader {header} />
-				</div>
-			{/each}
-		</div>
-	{/each}
-	{#each table.getRowModel().rows as row}
-		<div class="table-row">
-			{#each row.getAllCells() as cell}
-				<div class="table-cell">
-					<RenderCell {cell} />
-				</div>
-			{/each}
-		</div>
-	{/each}
-	{#each table.getFooterGroups() as footerGroup}
-		<div class="table-row">
-			{#each footerGroup.headers as footer}
-				<div class="table-cell">
-					<RenderFooter {footer} />
-				</div>
-			{/each}
-		</div>
-	{/each}
-</div>
+<table>
+	<thead>
+		{#each table.getHeaderGroups() as headerGroup}
+			<tr>
+				{#each headerGroup.headers as header}
+					<th colspan={header.colSpan}>
+						{#if !header.isPlaceholder}
+							<RenderHeader {header} />
+						{/if}
+					</th>
+				{/each}
+			</tr>
+		{/each}
+	</thead>
+	<tbody>
+		{#each table.getRowModel().rows as row}
+			<tr>
+				{#each row.getAllCells() as cell}
+					<td>
+						<RenderCell {cell} />
+					</td>
+				{/each}
+			</tr>
+		{/each}
+	</tbody>
+	<tfoot>
+		{#each table.getFooterGroups() as footerGroup}
+			<tr>
+				{#each footerGroup.headers as footer}
+					<th>
+						<RenderFooter {footer} />
+					</th>
+				{/each}
+			</tr>
+		{/each}
+	</tfoot>
+</table>
+
+<style>
+	table {
+		width: 100%;
+		border: solid 1px gray;
+	}
+
+	tr {
+		border: solid 1px gray;
+	}
+
+	th,
+	td {
+		border: solid 1px gray;
+	}
+</style>
