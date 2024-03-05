@@ -1,0 +1,16 @@
+.table-body {
+	border: solid 1px #ccc;
+}
+
+.table-row {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: solid 1px #ccc;
+}
+
+.table-cell {
+	width: 100%;
+	height: 100%;
+	border: solid 1px #ccc;
+	padding: 0.5rem;
+}
