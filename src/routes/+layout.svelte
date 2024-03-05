@@ -11,7 +11,7 @@
 		<ul class="nav-list">
 			<li><a href="/">Basic</a></li>
 			<li><a href="/column-groups">Column Groups</a></li>
-			<li><a href="/filtering">Filtering</a></li>
+			<li><a href="/sorting">Sorting</a></li>
 		</ul>
 	</nav>
 

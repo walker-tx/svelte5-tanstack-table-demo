@@ -6,7 +6,7 @@
 		type ColumnDef,
 		type TableOptionsResolved
 	} from '@tanstack/table-core';
-	import { data, type Person } from '$lib/data';
+	import { makePersonData, type Person } from '$lib/data';
 
 	const defaultColumns: ColumnDef<Person>[] = [
 		{
@@ -61,7 +61,7 @@
 	];
 
 	const options: TableOptionsResolved<Person> = {
-		data,
+		data: makePersonData(),
 		columns: defaultColumns,
 		getCoreRowModel: getCoreRowModel(),
 		state: { columnPinning: {} },
