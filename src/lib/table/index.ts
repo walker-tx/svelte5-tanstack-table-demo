@@ -1,16 +1,15 @@
 import {
-	createTable,
-	type RowData,
-	type TableOptions,
-	type TableOptionsResolved,
-	type TableState
+    createTable,
+    type RowData,
+    type TableOptions,
+    type TableOptionsResolved,
+    type TableState
 } from '@tanstack/table-core';
 import { derived, get, readable, writable, type Readable } from 'svelte/store';
 
+export * from '@tanstack/table-core';
+export { default as FlexRender } from './FlexRender.svelte';
 export { renderComponent } from './render-component';
-export { default as RenderCell } from './RenderCell.svelte';
-export { default as RenderFooter } from './RenderFooter.svelte';
-export { default as RenderHeader } from './RenderHeader.svelte';
 
 export function createSvelteTable<TData extends RowData>(
 	options: Readable<TableOptions<TData>> | TableOptions<TData>

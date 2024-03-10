@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { RenderHeader, RenderCell, RenderFooter } from '$lib/table';
+	import { makePersonData, type Person } from '$lib/data';
+	import FlexRender from '$lib/table/FlexRender.svelte';
 	import {
 		createTable,
 		getCoreRowModel,
 		type ColumnDef,
 		type TableOptionsResolved
 	} from '@tanstack/table-core';
-	import { makePersonData, type Person } from '$lib/data';
 
 	const defaultColumns: ColumnDef<Person>[] = [
 		{
@@ -79,7 +79,7 @@
 				{#each headerGroup.headers as header}
 					<th colspan={header.colSpan}>
 						{#if !header.isPlaceholder}
-							<RenderHeader {header} />
+							<FlexRender content={header.column.columnDef.header} context={header.getContext()} />
 						{/if}
 					</th>
 				{/each}
@@ -91,7 +91,7 @@
 			<tr>
 				{#each row.getAllCells() as cell}
 					<td>
-						<RenderCell {cell} />
+						<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
 					</td>
 				{/each}
 			</tr>
@@ -103,7 +103,7 @@
 				{#each footerGroup.headers as footer}
 					<th colspan={footer.colSpan}>
 						{#if !footer.isPlaceholder}
-							<RenderFooter {footer} />
+							<FlexRender content={footer.column.columnDef.footer} context={footer.getContext()} />
 						{/if}
 					</th>
 				{/each}

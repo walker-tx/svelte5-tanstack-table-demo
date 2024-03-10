@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
+	import { faker } from '@faker-js/faker';
 	import '../app.css';
 
-	export let children: Snippet;
+	faker.seed(0)
 </script>
 
 <div style="padding:1rem;">

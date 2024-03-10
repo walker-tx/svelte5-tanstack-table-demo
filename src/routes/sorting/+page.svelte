@@ -1,17 +1,15 @@
 <script lang="ts">
 	import { makeCityData, type City } from '$lib/data';
 	import {
-		RenderCell,
-		RenderFooter,
-		RenderHeader,
 		createSvelteTable,
 		renderComponent
 	} from '$lib/table';
+	import FlexRender from '$lib/table/FlexRender.svelte';
 	import {
-		type TableOptions,
 		createColumnHelper,
 		getCoreRowModel,
-		getSortedRowModel
+		getSortedRowModel,
+		type TableOptions
 	} from '@tanstack/table-core';
 	import SortHeader from './_components/SortHeader.svelte';
 
@@ -41,7 +39,7 @@
 		<div class="table-row">
 			{#each headerGroup.headers as header}
 				<div class="table-cell">
-					<RenderHeader {header} />
+					<FlexRender content={header.column.columnDef.header} context={header.getContext()} />
 				</div>
 			{/each}
 		</div>
@@ -50,7 +48,7 @@
 		<div class="table-row">
 			{#each row.getAllCells() as cell}
 				<div class="table-cell">
-					<RenderCell {cell} />
+					<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
 				</div>
 			{/each}
 		</div>
@@ -59,7 +57,7 @@
 		<div class="table-row">
 			{#each footerGroup.headers as footer}
 				<div class="table-cell">
-					<RenderFooter {footer} />
+					<FlexRender content={footer.column.columnDef.footer} context={footer.getContext()} />
 				</div>
 			{/each}
 		</div>
