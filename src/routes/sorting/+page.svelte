@@ -26,8 +26,6 @@
 
 	let data = makeCityData();
 
-	console.log({ data });
-
 	let options: TableOptions<City> = {
 		data,
 		columns: defaultColumns,
