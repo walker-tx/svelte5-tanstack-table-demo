@@ -2,7 +2,7 @@
 	import { faker } from '@faker-js/faker';
 	import '../app.css';
 
-	faker.seed(0)
+	faker.seed(123);
 </script>
 
 <div style="padding:1rem;">

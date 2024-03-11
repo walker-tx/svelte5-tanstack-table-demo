@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { makeCityData, type City } from '$lib/data';
-	import {
-		createSvelteTable,
-		renderComponent
-	} from '$lib/table';
-	import FlexRender from '$lib/table/FlexRender.svelte';
+	import { createSvelteTable, renderComponent } from '$lib/table';
+	import FlexRender from '$lib/table/flex-render.svelte';
 	import {
 		createColumnHelper,
 		getCoreRowModel,
+		getFacetedRowModel,
+		getFacetedUniqueValues,
+		getFilteredRowModel,
 		getSortedRowModel,
 		type TableOptions
 	} from '@tanstack/table-core';
@@ -24,18 +24,30 @@
 		})
 	];
 
-	const options: TableOptions<City> = {
-		data: makeCityData(),
+	let data = makeCityData();
+
+	let options: TableOptions<City> = {
+		data,
 		columns: defaultColumns,
 		getCoreRowModel: getCoreRowModel(),
-		getSortedRowModel: getSortedRowModel()
+		getSortedRowModel: getSortedRowModel(),
+		getFilteredRowModel: getFilteredRowModel(),
+		getFacetedRowModel: getFacetedRowModel(),
+		getFacetedUniqueValues: getFacetedUniqueValues()
 	};
 
-	$: table = createSvelteTable(options);
+	let table = createSvelteTable(options);
 </script>
 
+<div id="control-bar">
+	<strong>Controls:</strong>
+	<button onclick={() => table().resetSorting()}>Reset Sorting</button>
+	<button onclick={() => table().resetColumnFilters()}>Reset Filters</button>
+	<button onclick={() => table().reset()}>Reset All</button>
+</div>
+<hr />
 <div class="table-body">
-	{#each $table.getHeaderGroups() as headerGroup}
+	{#each table().getHeaderGroups() as headerGroup}
 		<div class="table-row">
 			{#each headerGroup.headers as header}
 				<div class="table-cell">
@@ -44,7 +56,7 @@
 			{/each}
 		</div>
 	{/each}
-	{#each $table.getRowModel().rows as row}
+	{#each table().getRowModel().rows as row}
 		<div class="table-row">
 			{#each row.getAllCells() as cell}
 				<div class="table-cell">
@@ -53,7 +65,7 @@
 			{/each}
 		</div>
 	{/each}
-	{#each $table.getFooterGroups() as footerGroup}
+	{#each table().getFooterGroups() as footerGroup}
 		<div class="table-row">
 			{#each footerGroup.headers as footer}
 				<div class="table-cell">
@@ -63,3 +75,11 @@
 		</div>
 	{/each}
 </div>
+
+<style>
+	#control-bar {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+</style>

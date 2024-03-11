@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { makePersonData, type Person } from '$lib/data';
-	import FlexRender from '$lib/table/FlexRender.svelte';
+	import FlexRender from '$lib/table/flex-render.svelte';
 	import {
 		createTable,
 		getCoreRowModel,

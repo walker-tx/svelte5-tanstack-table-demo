@@ -2,20 +2,41 @@
 	import type { City } from '$lib/data';
 	import type { HeaderContext } from '@tanstack/table-core';
 
-	type $$Props = {
+	type Props = {
 		label: string;
 		header: HeaderContext<City, unknown>;
 	};
 
-	export let label: $$Props['label'];
-	export let header: $$Props['header'];
+	const { label, header } = $props<Props>();
+
+	function handleSelect(e: Event) {
+		const target = e.target as HTMLSelectElement;
+		header.column.setFilterValue(target.value);
+	}
 </script>
 
 <div class="cell-wrapper">
 	<span>{label}</span>
-	{#if header.column.getCanSort()}
-		<button onclick={() => header.column.toggleSorting()}>Sort</button>
-	{/if}
+	<div class="control-wrapper">
+		{#if header.column.getCanSort()}
+			<button onclick={() => header.column.toggleSorting()}>
+				Sort
+				{#if header.column.getIsSorted() === 'asc'}
+					&#x25B2;
+				{:else if header.column.getIsSorted() === 'desc'}
+					&#x25BC;
+				{/if}
+			</button>
+		{/if}
+		{#if header.column.getCanFilter()}
+			<select value={header.column.getFilterValue()} onchange={handleSelect}>
+				<option value={undefined}>All</option>
+				{#each header.column.getFacetedUniqueValues() as value}
+					<option value={value[0]}>{value[0]} ({value[1]})</option>
+				{/each}
+			</select>
+		{/if}
+	</div>
 </div>
 
 <style>
@@ -24,5 +45,10 @@
 		align-items: center;
 		justify-content: space-between;
 		height: 100%;
+	}
+
+	.control-wrapper {
+		display: flex;
+		gap: 0.5rem;
 	}
 </style>

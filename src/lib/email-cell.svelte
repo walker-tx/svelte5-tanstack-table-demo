@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let email: string;
+	type Props = {
+		email: string;
+	};
+
+	const { email } = $props<Props>();
 </script>
 
 <a href="mailto:{email}">{email}</a>

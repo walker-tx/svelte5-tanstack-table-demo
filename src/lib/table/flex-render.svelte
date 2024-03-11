@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script
 	lang="ts"
 	generics="TData, TValue, TContext extends object = HeaderOrCellContext<TData, TValue>"
@@ -23,7 +21,7 @@
 		{@const result = content(context)}
 		{#if result instanceof RenderComponentConfig}
 			<svelte:component this={result.component} {...result.props} />
-		{:else}
+
 			{result}
 		{/if}
 	{/if}
