@@ -21,7 +21,7 @@
 		{@const result = content(context)}
 		{#if result instanceof RenderComponentConfig}
 			<svelte:component this={result.component} {...result.props} />
-
+		{:else}
 			{result}
 		{/if}
 	{/if}
