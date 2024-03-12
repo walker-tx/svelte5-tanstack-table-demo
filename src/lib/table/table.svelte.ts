@@ -6,12 +6,11 @@ import {
 	type TableOptionsResolved,
 	type TableState
 } from '@tanstack/table-core';
-import { untrack } from 'svelte';
 
 export function createSvelteTable<TData extends RowData>(options: TableOptions<TData>) {
 	const resolvedOptions: TableOptionsResolved<TData> = mergeObjects(
 		{
-			state: {},
+			state: { columnPinning: {} },
 			onStateChange() {},
 			renderFallbackValue: null,
 			mergeOptions: (
@@ -24,33 +23,32 @@ export function createSvelteTable<TData extends RowData>(options: TableOptions<T
 		options
 	);
 
-	let table = $state(createTable(resolvedOptions));
-	let state = $state<TableState>(table.initialState);
+	const table = createTable(resolvedOptions);
+	let tableState = $state<TableState>({ ...table.initialState });
 
 	$effect.pre(() => {
-		const _table = untrack(() => table);
-		_table.setOptions((prev) => {
+		table.setOptions((prev) => {
 			return mergeObjects(prev, options, {
-				state: mergeObjects(state, options.state || {}),
+				get state() {
+					return tableState;
+				},
 				onStateChange(updater: any) {
 					if (updater instanceof Function) {
-						state = updater({ ...table.getState(), ...state });
+						tableState = mergeObjects(tableState, updater(tableState));
 					} else {
-						state = updater;
+						tableState = updater;
 					}
 					resolvedOptions.onStateChange?.(updater);
 				}
 			});
 		});
-
-		table = mergeObjects(_table, {});
 	});
 
-	return () => table;
+	return table;
 }
 
 /** Merges objects together while keeping their getters alive */
-function mergeObjects<T>(...sources: any[]): T {
+export function mergeObjects<T>(...sources: any[]): T {
 	const target = {};
 	for (let i = sources.length - 1; i >= 0; i--) {
 		if (sources[i]) {

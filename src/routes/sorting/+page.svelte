@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { makeCityData, type City } from '$lib/data';
-	import { createSvelteTable, renderComponent } from '$lib/table';
+	import { createSvelteTable, mergeObjects, renderComponent } from '$lib/table';
 	import FlexRender from '$lib/table/flex-render.svelte';
 	import {
 		createColumnHelper,
@@ -9,7 +9,9 @@
 		getFacetedUniqueValues,
 		getFilteredRowModel,
 		getSortedRowModel,
-		type TableOptions
+		type TableOptions,
+		type SortingState,
+		type TableState
 	} from '@tanstack/table-core';
 	import SortHeader from './_components/SortHeader.svelte';
 
@@ -24,17 +26,18 @@
 		})
 	];
 
-	let data = makeCityData();
+	let data = $state(makeCityData());
 
 	let options: TableOptions<City> = {
-		data,
+		get data() {
+			return data;
+		},
 		columns: defaultColumns,
-		state: { columnPinning: {} },
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getFacetedRowModel: getFacetedRowModel(),
-		getFacetedUniqueValues: getFacetedUniqueValues()
+		getFacetedUniqueValues: getFacetedUniqueValues(),
 	};
 
 	let table = createSvelteTable(options);
@@ -42,13 +45,18 @@
 
 <div id="control-bar">
 	<strong>Controls:</strong>
-	<button onclick={() => table().resetSorting()}>Reset Sorting</button>
-	<button onclick={() => table().resetColumnFilters()}>Reset Filters</button>
-	<button onclick={() => table().reset()}>Reset All</button>
+	<button
+		onclick={() => {
+			data = makeCityData();
+		}}>Refresh Data</button
+	>
+	<button onclick={() => table.resetSorting()}>Reset Sorting</button>
+	<button onclick={() => table.resetColumnFilters()}>Reset Filters</button>
+	<button onclick={() => table.reset()}>Reset All</button>
 </div>
 <hr />
 <div class="table-body">
-	{#each table().getHeaderGroups() as headerGroup}
+	{#each table.getHeaderGroups() as headerGroup}
 		<div class="table-row">
 			{#each headerGroup.headers as header}
 				<div class="table-cell">
@@ -57,7 +65,7 @@
 			{/each}
 		</div>
 	{/each}
-	{#each table().getRowModel().rows as row}
+	{#each table.getRowModel().rows as row}
 		<div class="table-row">
 			{#each row.getAllCells() as cell}
 				<div class="table-cell">
@@ -66,7 +74,7 @@
 			{/each}
 		</div>
 	{/each}
-	{#each table().getFooterGroups() as footerGroup}
+	{#each table.getFooterGroups() as footerGroup}
 		<div class="table-row">
 			{#each footerGroup.headers as footer}
 				<div class="table-cell">
