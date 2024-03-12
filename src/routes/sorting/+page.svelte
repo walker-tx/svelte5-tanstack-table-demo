@@ -29,6 +29,7 @@
 	let options: TableOptions<City> = {
 		data,
 		columns: defaultColumns,
+		state: { columnPinning: {} },
 		getCoreRowModel: getCoreRowModel(),
 		getSortedRowModel: getSortedRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),

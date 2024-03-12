@@ -89,7 +89,7 @@
 	<tbody>
 		{#each table.getRowModel().rows as row}
 			<tr>
-				{#each row.getAllCells() as cell}
+				{#each row.getVisibleCells() as cell}
 					<td>
 						<FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
 					</td>
